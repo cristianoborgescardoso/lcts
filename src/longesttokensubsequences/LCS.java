@@ -6,6 +6,8 @@
 package longesttokensubsequences;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -225,7 +227,25 @@ public class LCS
                 addLTCS(getLCS(lines.get(i), lines.get(j)));
             }
         }
+        List<LCTSOccurences> ocurrencesList = (List<LCTSOccurences>) lctsMap.values();
 
+        ocurrencesList.sort(Comparator.comparingInt((LCTSOccurences a) -> a.getOccurences()).reversed());
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (LCTSOccurences lctso : ocurrencesList)
+        {
+            stringBuilder.append(lctso.getTokenSubsequence().size());
+            stringBuilder.append("\t");
+            stringBuilder.append(lctso.getOccurences());
+            stringBuilder.append("\t");
+            for (String token : lctso.getTokenSubsequence())
+            {
+                stringBuilder.append(token);
+                stringBuilder.append(" ");
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 
 }
