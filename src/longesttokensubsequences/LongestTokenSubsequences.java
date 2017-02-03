@@ -23,9 +23,11 @@ public class LongestTokenSubsequences
      */
     public static void main(String[] args) throws IOException
     {
+
+        Conversor conversor = new Conversor(new FileInputStream(args[0]));
+
         List<String[]> allLines = new ArrayList<>();
-        // TODO code application logic here
-        Conversor conversor = new Conversor(new FileInputStream("fileList"));
+
         for (String fileName : conversor.ConverterInputStreamToStringPorLinha())
         {
 //            for (String[] line : new Tokenizer().tokenize(fileName))
