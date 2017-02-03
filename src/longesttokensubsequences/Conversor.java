@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  *
- * @author Cristiano Borges Cardoso <cristianoborgescardoso@cnptia.embrapa.br>
+ * @author Cristiano Borges Cardoso 
  */
 public class Conversor
 {
