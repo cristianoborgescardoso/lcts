@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -28,66 +29,68 @@ public class LCTS
         LEFT;
     }
 
-    public static void main(String[] args)
-    {
-        String X = "ABCDABCADBC";
-        String Y = "AXBDCABC";
-        String[] arrX =
-        {
-            "A", "B", "C", "D", "A", "B", "C", "A", "D", "B", "C"
-        };
-        String[] arrY =
-        {
-            "A", "X", "B", "D", "C", "A", "B", "C"
-        };
-        LCTS driver = new LCTS();
-        int[][] dpLCS = driver.dpLCS(X, Y);
-        System.out.println(driver.backtrack(dpLCS, X.toCharArray(), Y.toCharArray(), X.length(), Y.length()));
-        new LCTS().getLCS(arrX, arrY);
-    }
-
-    private StringBuilder backtrack(int[][] dpTable, char[] charX, char[] charY, int i, int j)
-    {
-        StringBuilder sb = new StringBuilder();
-        if (i == 0 || j == 0)
-        {
-            return sb;
-        } else if (charX[i - 1] == charY[j - 1])
-        {
-            return backtrack(dpTable, charX, charY, i - 1, j - 1).append(charX[i - 1]);
-        } else if (dpTable[i][j - 1] > dpTable[i - 1][j])
-        {
-            return backtrack(dpTable, charX, charY, i, j - 1);
-        } else
-        {
-            return backtrack(dpTable, charX, charY, i - 1, j);
-        }
-    }
-
-    private int[][] dpLCS(String X, String Y)
-    {
-        if (X == null || X.length() <= 0 || Y == null || Y.length() <= 0)
-        {
-            return null;
-        }
-        int[][] dpTable = new int[X.length() + 1][Y.length() + 1];
-        char[] charX = X.toCharArray();
-        char[] charY = Y.toCharArray();
-        for (int i = 0; i < charX.length; i++)
-        {
-            for (int j = 0; j < charY.length; j++)
-            {
-                if (charX[i] == charY[j])
-                {
-                    dpTable[i + 1][j + 1] = dpTable[i][j] + 1;
-                } else if (charX[i] != charY[j])
-                {
-                    dpTable[i + 1][j + 1] = Math.max(dpTable[i + 1][j], dpTable[i][j + 1]);
-                }
-            }
-        }
-        return dpTable;
-    }
+//    public static void main(String[] args)
+//    {
+//        String X = "ABCDABCADBC";
+//        String Y = "AXBDCABC";
+//        String[] arrX
+//                =
+//                {
+//                    "A", "B", "C", "D", "A", "B", "C", "A", "D", "B", "C"
+//                };
+//        String[] arrY
+//                =
+//                {
+//                    "A", "X", "B", "D", "C", "A", "B", "C"
+//                };
+//        LCTS driver = new LCTS();
+//        int[][] dpLCS = driver.dpLCS(X, Y);
+//        System.out.println(driver.backtrack(dpLCS, X.toCharArray(), Y.toCharArray(), X.length(), Y.length()));
+//        new LCTS().getLCS(arrX, arrY);
+//    }
+//
+//    private StringBuilder backtrack(int[][] dpTable, char[] charX, char[] charY, int i, int j)
+//    {
+//        StringBuilder sb = new StringBuilder();
+//        if (i == 0 || j == 0)
+//        {
+//            return sb;
+//        } else if (charX[i - 1] == charY[j - 1])
+//        {
+//            return backtrack(dpTable, charX, charY, i - 1, j - 1).append(charX[i - 1]);
+//        } else if (dpTable[i][j - 1] > dpTable[i - 1][j])
+//        {
+//            return backtrack(dpTable, charX, charY, i, j - 1);
+//        } else
+//        {
+//            return backtrack(dpTable, charX, charY, i - 1, j);
+//        }
+//    }
+//
+//    private int[][] dpLCS(String X, String Y)
+//    {
+//        if (X == null || X.length() <= 0 || Y == null || Y.length() <= 0)
+//        {
+//            return null;
+//        }
+//        int[][] dpTable = new int[X.length() + 1][Y.length() + 1];
+//        char[] charX = X.toCharArray();
+//        char[] charY = Y.toCharArray();
+//        for (int i = 0; i < charX.length; i++)
+//        {
+//            for (int j = 0; j < charY.length; j++)
+//            {
+//                if (charX[i] == charY[j])
+//                {
+//                    dpTable[i + 1][j + 1] = dpTable[i][j] + 1;
+//                } else if (charX[i] != charY[j])
+//                {
+//                    dpTable[i + 1][j + 1] = Math.max(dpTable[i + 1][j], dpTable[i][j + 1]);
+//                }
+//            }
+//        }
+//        return dpTable;
+//    }
 
     private List<String> getLCS(String[] lineX, String[] lineY)
     {
@@ -171,8 +174,13 @@ public class LCTS
         }
     }
 
-    private void addLTCS(List<String> tokenList)
+    private void addLTCS(List<String> tokenList, int i, int j)
     {
+        if (tokenList.isEmpty())
+        {
+            return;
+        }
+
         StringBuilder mergedTokens = new StringBuilder();
 
         for (String token : tokenList)
@@ -182,25 +190,25 @@ public class LCTS
 
         LCTSOccurences lctsOccurences = lctsMap.get(mergedTokens.toString());
 
-        if (lctsOccurences != null)
+        if (lctsOccurences == null)
         {
-            lctsOccurences.increaseOccurences();
-        } else
-        {
-            lctsMap.put(mergedTokens.toString(), new LCTSOccurences(tokenList, 1));
+            lctsOccurences = new LCTSOccurences(tokenList);
+            lctsMap.put(mergedTokens.toString(), lctsOccurences);
         }
+
+        lctsOccurences.increaseOccurences(i);
+        lctsOccurences.increaseOccurences(j);
     }
 
     private class LCTSOccurences
     {
 
         private final List<String> tokenSubsequence;
-        private int occurences;
+        private final HashSet<Integer> lineOcurreces = new HashSet<>();
 
-        public LCTSOccurences(List<String> tokenSubsequence, int occurences)
+        public LCTSOccurences(List<String> tokenSubsequence)
         {
             this.tokenSubsequence = tokenSubsequence;
-            this.occurences = occurences;
         }
 
         public List<String> getTokenSubsequence()
@@ -210,12 +218,15 @@ public class LCTS
 
         public int getOccurences()
         {
-            return occurences;
+            return lineOcurreces.size();
         }
 
-        public void increaseOccurences()
+        public void increaseOccurences(int lineNumber)
         {
-            occurences++;
+            if (!lineOcurreces.contains(lineNumber))
+            {
+                lineOcurreces.add(lineNumber);
+            }
         }
     }
 
@@ -225,7 +236,7 @@ public class LCTS
         {
             for (int j = i + 1; j < lines.size(); j++)
             {
-                addLTCS(getLCS(lines.get(i), lines.get(j)));
+                addLTCS(getLCS(lines.get(i), lines.get(j)), i, j);
             }
         }
         List<LCTSOccurences> ocurrencesList = new ArrayList<>();

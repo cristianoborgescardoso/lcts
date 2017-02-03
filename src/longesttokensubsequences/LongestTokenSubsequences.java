@@ -5,8 +5,11 @@
  */
 package longesttokensubsequences;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -20,12 +23,17 @@ public class LongestTokenSubsequences
      */
     public static void main(String[] args) throws IOException
     {
+        List<String[]> allLines = new ArrayList<>();
         // TODO code application logic here
-        for (String[] line : new Tokenizer().tokenize("Teste2.java"))
+        Conversor conversor = new Conversor(new FileInputStream("fileList"));
+        for (String fileName : conversor.ConverterInputStreamToStringPorLinha())
         {
-            System.out.println(Arrays.toString(line));
+//            for (String[] line : new Tokenizer().tokenize(fileName))
+//            {
+//                System.out.println(Arrays.toString(line));
+//            }
+            allLines.addAll(new Tokenizer().tokenize(fileName));
         }
-        System.out.println(new LCTS().getLTCSOcurrences(new Tokenizer().tokenize("Teste2.java")));
+        System.out.println(new LCTS().getLTCSOcurrences(allLines));
     }
-
 }
