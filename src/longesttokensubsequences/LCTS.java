@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author cbcardoso
  */
-public class LCS
+public class LCTS
 {
 
     private Map<String, LCTSOccurences> lctsMap = new HashMap();
@@ -40,10 +40,10 @@ public class LCS
         {
             "A", "X", "B", "D", "C", "A", "B", "C"
         };
-        LCS driver = new LCS();
+        LCTS driver = new LCTS();
         int[][] dpLCS = driver.dpLCS(X, Y);
         System.out.println(driver.backtrack(dpLCS, X.toCharArray(), Y.toCharArray(), X.length(), Y.length()));
-        new LCS().getLCS(arrX, arrY);
+        new LCTS().getLCS(arrX, arrY);
     }
 
     private StringBuilder backtrack(int[][] dpTable, char[] charX, char[] charY, int i, int j)
@@ -139,11 +139,11 @@ public class LCS
         }
         List<String> tokens = new ArrayList<>();
         printLCS(b, lineX, m - 1, n - 1, tokens);
-        tokens.stream().forEach((token)
-                -> 
-                {
-                    System.out.print(token);
-        });
+//        tokens.stream().forEach((token)
+//                -> 
+//                {
+//                    System.out.print(token);
+//        });
         return tokens;
 
     }
@@ -179,6 +179,7 @@ public class LCS
         {
             mergedTokens.append(token);
         }
+
         LCTSOccurences lctsOccurences = lctsMap.get(mergedTokens.toString());
 
         if (lctsOccurences != null)
@@ -212,13 +213,13 @@ public class LCS
             return occurences;
         }
 
-        public int increaseOccurences()
+        public void increaseOccurences()
         {
-            return occurences;
+            occurences++;
         }
     }
 
-    private String getLTCSOcurrences(List<String[]> lines)
+    public String getLTCSOcurrences(List<String[]> lines)
     {
         for (int i = 0; i < lines.size(); i++)
         {
@@ -227,23 +228,27 @@ public class LCS
                 addLTCS(getLCS(lines.get(i), lines.get(j)));
             }
         }
-        List<LCTSOccurences> ocurrencesList = (List<LCTSOccurences>) lctsMap.values();
+        List<LCTSOccurences> ocurrencesList = new ArrayList<>();
+        ocurrencesList.addAll(lctsMap.values());
 
-        ocurrencesList.sort(Comparator.comparingInt((LCTSOccurences a) -> a.getOccurences()).reversed());
+        ocurrencesList.sort(Comparator.comparingInt((LCTSOccurences a) -> a.getTokenSubsequence().size()).reversed());
 
         StringBuilder stringBuilder = new StringBuilder();
         for (LCTSOccurences lctso : ocurrencesList)
         {
-            stringBuilder.append(lctso.getTokenSubsequence().size());
-            stringBuilder.append("\t");
-            stringBuilder.append(lctso.getOccurences());
-            stringBuilder.append("\t");
-            for (String token : lctso.getTokenSubsequence())
+//            if (lctso.getOccurences() > 1)
             {
-                stringBuilder.append(token);
-                stringBuilder.append(" ");
+                stringBuilder.append(lctso.getTokenSubsequence().size());
+                stringBuilder.append("\t");
+                stringBuilder.append(lctso.getOccurences());
+                stringBuilder.append("\t");
+                for (String token : lctso.getTokenSubsequence())
+                {
+                    stringBuilder.append(token);
+                    stringBuilder.append(" ");
+                }
+                stringBuilder.append("\n");
             }
-            stringBuilder.append("\n");
         }
         return stringBuilder.toString();
     }
