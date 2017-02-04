@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  *
- * @author Cristiano Borges Cardoso 
+ * @author Cristiano Borges Cardoso
  */
 public class LongestTokenSubsequences
 {
@@ -18,6 +18,7 @@ public class LongestTokenSubsequences
      */
     public static void main(String[] args) throws IOException
     {
+        long startTime = System.nanoTime();
 
         Conversor conversor = new Conversor(new FileInputStream(args[0]));
 
@@ -32,5 +33,6 @@ public class LongestTokenSubsequences
             allLines.addAll(new Tokenizer().tokenize(fileName));
         }
         System.out.println(new LCTS().getLTCSOcurrences(allLines));
+        System.out.println("Elapsed time: " + (double) (System.nanoTime() - startTime) / 1000000000.0);
     }
 }
