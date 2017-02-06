@@ -33,7 +33,7 @@ public class LongestTokenSubsequences
             allLines.addAll(new Tokenizer().tokenize(fileName));
         }
         System.out.println(new LCTS().getLTCSOcurrences(allLines));
-        System.out.println("Elapsed time: " + (double) (System.nanoTime() - startTime) / 1000000000.0);
+        System.out.println("Elapsed time (seconds): " + (double) (System.nanoTime() - startTime) / 1000000000.0);
     }
    
 }
