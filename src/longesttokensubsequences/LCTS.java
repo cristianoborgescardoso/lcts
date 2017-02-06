@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  *
- * @author Cristiano Borges Cardoso 
+ * @author Cristiano Borges Cardoso
  */
 public class LCTS
 {
@@ -22,7 +22,7 @@ public class LCTS
         UP_LEFT,
         LEFT;
     }
-    
+
     private List<String> getLCS(String[] lineX, String[] lineY)
     {
         int m = lineX.length;
@@ -148,10 +148,19 @@ public class LCTS
         }
     }
 
+    int oldProgress = 0;
+    int newProgress = 0;
+
     public String getLTCSOcurrences(List<String[]> lines)
     {
         for (int i = 0; i < lines.size(); i++)
         {
+            newProgress = (i * 100 / lines.size());
+            if (newProgress > oldProgress)
+            {
+                System.out.println("Progress: " + newProgress + "%");
+                oldProgress = newProgress;
+            }
             for (int j = i + 1; j < lines.size(); j++)
             {
                 addLTCS(getLCS(lines.get(i), lines.get(j)), i, j);

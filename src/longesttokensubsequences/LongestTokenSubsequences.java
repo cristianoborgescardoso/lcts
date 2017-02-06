@@ -35,4 +35,5 @@ public class LongestTokenSubsequences
         System.out.println(new LCTS().getLTCSOcurrences(allLines));
         System.out.println("Elapsed time: " + (double) (System.nanoTime() - startTime) / 1000000000.0);
     }
+   
 }
